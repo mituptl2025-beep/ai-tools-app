@@ -3,6 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
+
 <title>AI Hub - All AI Tools</title>
 
 <style>
@@ -10,10 +11,10 @@
   box-sizing:border-box;
   margin:0;
   padding:0;
-  font-family:Arial,sans-serif;
 }
 
 body{
+  font-family:Arial,sans-serif;
   background:#f5f7fb;
   color:#111827;
 }
@@ -21,31 +22,22 @@ body{
 header{
   background:#111827;
   color:white;
-  padding:18px 20px;
+  padding:20px;
   text-align:center;
 }
 
 header h1{
   font-size:28px;
+  margin-bottom:6px;
 }
 
 header p{
-  margin-top:6px;
-  color:#cbd5e1;
-}
-
-.container{
-  max-width:1100px;
-  margin:auto;
-  padding:25px 15px;
+  color:#d1d5db;
 }
 
 .hero{
-  background:white;
-  border-radius:18px;
-  padding:30px 20px;
   text-align:center;
-  box-shadow:0 5px 20px rgba(0,0,0,.06);
+  padding:35px 18px 25px;
 }
 
 .hero h2{
@@ -54,67 +46,161 @@ header p{
 }
 
 .hero p{
-  color:#64748b;
+  color:#6b7280;
   margin-bottom:20px;
 }
 
 .search{
   width:100%;
-  max-width:600px;
-  padding:15px;
+  max-width:500px;
+  padding:14px;
   border:1px solid #d1d5db;
   border-radius:12px;
   font-size:16px;
+}
+
+.container{
+  max-width:1000px;
+  margin:auto;
+  padding:20px;
 }
 
 .tools{
   display:grid;
   grid-template-columns:repeat(auto-fit,minmax(220px,1fr));
   gap:18px;
-  margin-top:25px;
 }
 
-.tool{
+.card{
   background:white;
-  padding:22px;
   border-radius:16px;
-  box-shadow:0 5px 18px rgba(0,0,0,.06);
-  transition:.2s;
+  padding:22px;
+  box-shadow:0 5px 18px rgba(0,0,0,.08);
 }
 
-.tool:hover{
-  transform:translateY(-4px);
+.card .icon{
+  font-size:38px;
+  margin-bottom:10px;
 }
 
-.icon{
-  font-size:35px;
-  margin-bottom:12px;
-}
-
-.tool h3{
+.card h3{
   margin-bottom:8px;
 }
 
-.tool p{
-  color:#64748b;
-  font-size:14px;
-  line-height:1.5;
+.card p{
+  color:#6b7280;
+  min-height:45px;
+  margin-bottom:15px;
 }
 
-button{
-  margin-top:15px;
+.card button{
+  width:100%;
+  padding:12px;
   border:0;
-  padding:11px 18px;
-  border-radius:9px;
+  border-radius:10px;
   background:#111827;
   color:white;
+  font-size:15px;
   cursor:pointer;
+}
+
+.card button:hover{
+  opacity:.9;
+}
+
+/* Chat popup */
+
+#chatBox{
+  display:none;
+  position:fixed;
+  inset:0;
+  background:rgba(0,0,0,.55);
+  z-index:1000;
+  padding:20px;
+}
+
+.chat{
+  background:white;
+  max-width:600px;
+  width:100%;
+  height:85vh;
+  margin:auto;
+  margin-top:5vh;
+  border-radius:18px;
+  overflow:hidden;
+  display:flex;
+  flex-direction:column;
+}
+
+.chatHeader{
+  background:#111827;
+  color:white;
+  padding:16px;
+  display:flex;
+  justify-content:space-between;
+  align-items:center;
+}
+
+.chatHeader button{
+  background:none;
+  border:0;
+  color:white;
+  font-size:25px;
+}
+
+.messages{
+  flex:1;
+  overflow-y:auto;
+  padding:15px;
+}
+
+.message{
+  padding:11px 14px;
+  border-radius:12px;
+  margin-bottom:10px;
+  max-width:85%;
+  white-space:pre-wrap;
+}
+
+.user{
+  background:#e5e7eb;
+  margin-left:auto;
+}
+
+.bot{
+  background:#eef2ff;
+  margin-right:auto;
+}
+
+.chatInput{
+  display:flex;
+  gap:8px;
+  padding:12px;
+  border-top:1px solid #ddd;
+}
+
+.chatInput textarea{
+  flex:1;
+  resize:none;
+  border:1px solid #ccc;
+  border-radius:10px;
+  padding:12px;
+  font-size:15px;
+}
+
+.chatInput button{
+  border:0;
+  background:#111827;
+  color:white;
+  padding:0 18px;
+  border-radius:10px;
+  font-size:16px;
 }
 
 footer{
   text-align:center;
   padding:30px;
-  color:#64748b;
+  color:#6b7280;
 }
 </style>
 </head>
@@ -126,116 +212,279 @@ footer{
   <p>All-in-One AI Tools</p>
 </header>
 
-<div class="container">
-
 <section class="hero">
   <h2>Powerful AI Tools in One Place</h2>
-  <p>Write, create, translate, code and more with AI.</p>
+  <p>Chat, write, summarize, translate and more.</p>
 
   <input
     class="search"
     id="search"
     type="text"
     placeholder="🔍 Search AI tools..."
-    onkeyup="searchTools()"
+    oninput="searchTools()"
   >
 </section>
 
-<section class="tools" id="tools">
+<main class="container">
 
-<div class="tool">
-  <div class="icon">🤖</div>
-  <h3>AI Chat</h3>
-  <p>Chat with an AI assistant and ask anything.</p>
-  <button onclick="openTool('AI Chat')">Open Tool</button>
+<div class="tools" id="tools">
+
+  <div class="card" data-name="AI Chat">
+    <div class="icon">🤖</div>
+    <h3>AI Chat</h3>
+    <p>Ask questions and get AI answers.</p>
+    <button onclick="openChat()">Open AI Chat</button>
+  </div>
+
+  <div class="card" data-name="AI Writer">
+    <div class="icon">✍️</div>
+    <h3>AI Writer</h3>
+    <p>Create articles, posts and content.</p>
+    <button onclick="comingSoon('AI Writer')">Open Tool</button>
+  </div>
+
+  <div class="card" data-name="Summarizer">
+    <div class="icon">📝</div>
+    <h3>Summarizer</h3>
+    <p>Summarize long text quickly.</p>
+    <button onclick="comingSoon('Summarizer')">Open Tool</button>
+  </div>
+
+  <div class="card" data-name="Translator">
+    <div class="icon">🌐</div>
+    <h3>Translator</h3>
+    <p>Translate text into different languages.</p>
+    <button onclick="comingSoon('Translator')">Open Tool</button>
+  </div>
+
+  <div class="card" data-name="Code Generator">
+    <div class="icon">💻</div>
+    <h3>Code Generator</h3>
+    <p>Generate code with AI assistance.</p>
+    <button onclick="comingSoon('Code Generator')">Open Tool</button>
+  </div>
+
+  <div class="card" data-name="PDF AI">
+    <div class="icon">📄</div>
+    <h3>PDF AI</h3>
+    <p>Ask questions about PDF documents.</p>
+    <button onclick="comingSoon('PDF AI')">Open Tool</button>
+  </div>
+
+  <div class="card" data-name="AI Image">
+    <div class="icon">🎨</div>
+    <h3>AI Image</h3>
+    <p>Create images using AI.</p>
+    <button onclick="comingSoon('AI Image')">Open Tool</button>
+  </div>
+
+  <div class="card" data-name="AI Voice">
+    <div class="icon">🎙️</div>
+    <h3>AI Voice</h3>
+    <p>AI voice and speech tools.</p>
+    <button onclick="comingSoon('AI Voice')">Open Tool</button>
+  </div>
+
 </div>
 
-<div class="tool">
-  <div class="icon">✍️</div>
-  <h3>AI Writer</h3>
-  <p>Create articles, emails, captions and content.</p>
-  <button onclick="openTool('AI Writer')">Open Tool</button>
-</div>
-
-<div class="tool">
-  <div class="icon">📝</div>
-  <h3>Summarizer</h3>
-  <p>Turn long text into short useful summaries.</p>
-  <button onclick="openTool('Summarizer')">Open Tool</button>
-</div>
-
-<div class="tool">
-  <div class="icon">🌐</div>
-  <h3>Translator</h3>
-  <p>Translate text between different languages.</p>
-  <button onclick="openTool('Translator')">Open Tool</button>
-</div>
-
-<div class="tool">
-  <div class="icon">💻</div>
-  <h3>Code Generator</h3>
-  <p>Generate and explain programming code with AI.</p>
-  <button onclick="openTool('Code Generator')">Open Tool</button>
-</div>
-
-<div class="tool">
-  <div class="icon">📄</div>
-  <h3>PDF AI</h3>
-  <p>Read, summarize and work with documents.</p>
-  <button onclick="openTool('PDF AI')">Open Tool</button>
-</div>
-
-<div class="tool">
-  <div class="icon">🖼️</div>
-  <h3>AI Image</h3>
-  <p>Create images using artificial intelligence.</p>
-  <button onclick="openTool('AI Image')">Open Tool</button>
-</div>
-
-<div class="tool">
-  <div class="icon">🎤</div>
-  <h3>AI Voice</h3>
-  <p>Work with speech, voice and audio tools.</p>
-  <button onclick="openTool('AI Voice')">Open Tool</button>
-</div>
-
-</section>
-
-</div>
+</main>
 
 <footer>
-  © 2026 AI Hub • All AI Tools in One Place
+  🤖 AI Hub — All-in-One AI Tools
 </footer>
+
+
+<!-- AI CHAT -->
+
+<div id="chatBox">
+
+  <div class="chat">
+
+    <div class="chatHeader">
+      <strong>🤖 AI Chat</strong>
+      <button onclick="closeChat()">×</button>
+    </div>
+
+    <div class="messages" id="messages">
+      <div class="message bot">
+        👋 Hello! Ask me anything.
+      </div>
+    </div>
+
+    <div class="chatInput">
+
+      <textarea
+        id="userMessage"
+        rows="2"
+        placeholder="Type your question..."
+      ></textarea>
+
+      <button onclick="sendMessage()">Send</button>
+
+    </div>
+
+  </div>
+
+</div>
+
 
 <script>
 
-function openTool(name){
-  alert(name + " will be available soon!");
+const WORKER_URL =
+"https://ai-tools-api.mituptl2025.workers.dev";
+
+
+function openChat(){
+  document.getElementById("chatBox").style.display="block";
 }
+
+
+function closeChat(){
+  document.getElementById("chatBox").style.display="none";
+}
+
+
+function comingSoon(name){
+  alert(name + " will be available soon! 🚀");
+}
+
 
 function searchTools(){
 
-  let input =
+  const query =
     document.getElementById("search").value.toLowerCase();
 
-  let tools =
-    document.querySelectorAll(".tool");
+  const cards =
+    document.querySelectorAll(".card");
 
-  tools.forEach(function(tool){
+  cards.forEach(card => {
 
-    let text =
-      tool.innerText.toLowerCase();
+    const name =
+      card.dataset.name.toLowerCase();
 
-    if(text.includes(input)){
-      tool.style.display="block";
+    if(name.includes(query)){
+      card.style.display="block";
     }else{
-      tool.style.display="none";
+      card.style.display="none";
     }
 
   });
+
 }
+
+
+function addMessage(text,type){
+
+  const messages =
+    document.getElementById("messages");
+
+  const div =
+    document.createElement("div");
+
+  div.className =
+    "message " + type;
+
+  div.textContent = text;
+
+  messages.appendChild(div);
+
+  messages.scrollTop =
+    messages.scrollHeight;
+
+}
+
+
+async function sendMessage(){
+
+  const input =
+    document.getElementById("userMessage");
+
+  const message =
+    input.value.trim();
+
+  if(!message){
+    return;
+  }
+
+  addMessage(message,"user");
+
+  input.value="";
+
+  addMessage("⏳ Thinking...","bot");
+
+  try{
+
+    const response =
+      await fetch(WORKER_URL,{
+
+        method:"POST",
+
+        headers:{
+          "Content-Type":"application/json"
+        },
+
+        body:JSON.stringify({
+          message:message
+        })
+
+      });
+
+
+    const data =
+      await response.json();
+
+
+    const messages =
+      document.getElementById("messages");
+
+    const lastMessage =
+      messages.lastElementChild;
+
+
+    if(data.answer){
+
+      lastMessage.textContent =
+        data.answer;
+
+    }else{
+
+      lastMessage.textContent =
+        "❌ " + (data.error || "Something went wrong.");
+
+    }
+
+
+  }catch(error){
+
+    const messages =
+      document.getElementById("messages");
+
+    const lastMessage =
+      messages.lastElementChild;
+
+    lastMessage.textContent =
+      "❌ Unable to connect to AI server.";
+
+  }
+
+}
+
+
+document
+  .getElementById("userMessage")
+  .addEventListener("keydown",function(event){
+
+    if(event.key==="Enter" && !event.shiftKey){
+
+      event.preventDefault();
+
+      sendMessage();
+
+    }
+
+  });
 
 </script>
 
 </body>
-  </html>
+</html>
